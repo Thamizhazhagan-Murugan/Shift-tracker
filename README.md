@@ -25,6 +25,13 @@ Three tabs along the bottom:
 - Tap a bar to see the exact date/period and hours.
 - Summary stats: this period, average per period, and total shown.
 
+**Home-screen widget**
+- A resizable Android widget to **clock in / out without opening the app**.
+- Shows your current status (clocked in/out) and today's hours; the button
+  turns green (Punch In) or red (Punch Out). Tapping it toggles your punch via a
+  lightweight background handler; tapping elsewhere opens the app.
+- Add it by long-pressing your home screen → **Widgets** → **Shift Tracker**.
+
 **Settings**
 - **Choose when your biweekly period starts** (pay-period anchor date).
 - **Optional time rounding** (5 / 6 / 15 min).

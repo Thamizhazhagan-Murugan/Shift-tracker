@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'screens/root_screen.dart';
 import 'services/repository.dart';
+import 'services/widget_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final repository = await Repository.open();
+  await WidgetService.registerCallback();
+  await WidgetService.sync(
+      repository.loadShifts(), repository.loadSettings().roundingMinutes);
   runApp(ShiftTrackerApp(repository: repository));
 }
 

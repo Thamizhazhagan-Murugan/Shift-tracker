@@ -18,6 +18,12 @@ class Repository {
     return Repository(prefs);
   }
 
+  /// Re-read from disk (picks up changes made by the widget background isolate).
+  Future<List<Shift>> reload() async {
+    await _prefs.reload();
+    return loadShifts();
+  }
+
   List<Shift> loadShifts() {
     final raw = _prefs.getString(_shiftsKey);
     if (raw == null || raw.isEmpty) return [];

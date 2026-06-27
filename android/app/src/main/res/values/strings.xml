@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_title">SHIFT TRACKER</string>
+    <string name="widget_status_default">Clocked out</string>
+    <string name="widget_today_default">Today: 0.00 h</string>
+    <string name="widget_button_default">Punch In</string>
+</resources>

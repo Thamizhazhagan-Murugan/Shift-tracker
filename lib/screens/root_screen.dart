@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/settings.dart';
 import '../models/shift.dart';
 import '../services/repository.dart';
+import '../services/widget_service.dart';
 import 'calendar_tab.dart';
 import 'home_tab.dart';
 import 'settings_sheet.dart';
@@ -34,6 +35,8 @@ class _RootScreenState extends State<RootScreen>
     WidgetsBinding.instance.addObserver(this);
   }
 
+  void _syncWidget() => WidgetService.sync(_shifts, _settings.roundingMinutes);
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -42,7 +45,13 @@ class _RootScreenState extends State<RootScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed && mounted) setState(() {});
+    if (state != AppLifecycleState.resumed) return;
+    // The widget may have punched in/out while we were backgrounded — reload.
+    widget.repository.reload().then((fresh) {
+      if (!mounted) return;
+      setState(() => _shifts = fresh);
+      _syncWidget();
+    });
   }
 
   Shift? get _activeShift {
@@ -68,6 +77,7 @@ class _RootScreenState extends State<RootScreen>
       }
     });
     _persist();
+    _syncWidget();
   }
 
   Future<void> _openSettings() async {
@@ -86,6 +96,7 @@ class _RootScreenState extends State<RootScreen>
         _periodOffset = 0;
       });
       await widget.repository.saveSettings(updated);
+      _syncWidget();
     }
   }
 
@@ -120,6 +131,7 @@ class _RootScreenState extends State<RootScreen>
       }
     });
     _persist();
+    _syncWidget();
   }
 
   static const _titles = ['Shift Tracker', 'Calendar', 'Trends'];

@@ -39,6 +39,7 @@ dependencies:
   # Pinned to 0.68.0: newer fl_chart needs Flutter 3.27+ (Color.withValues API).
   fl_chart: 0.68.0
   table_calendar: ^3.2.0
+  home_widget: ^0.9.2+1
 
 dev_dependencies:
   flutter_test:
