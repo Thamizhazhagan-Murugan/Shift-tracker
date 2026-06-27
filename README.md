@@ -34,7 +34,22 @@ test/
   widget_test.dart           Punch in/out smoke test
 ```
 
-## Run it
+## Download the APK from GitHub Actions (no setup needed)
+
+Every push to this branch builds the app automatically. To get the APK:
+
+1. Go to the **Actions** tab of this repo on GitHub.
+2. Open the latest **Build Android APK** run (green checkmark).
+3. Scroll to **Artifacts** and download **shift-tracker-apk**.
+4. Unzip it, transfer `app-release.apk` to your Android phone, and tap to install
+   (enable "Install unknown apps" for your browser/file manager first).
+
+> Note: the APK is signed with Flutter's debug key, which is fine for installing
+> on your own phone. Publishing to the Play Store would need a real signing key.
+
+You can also trigger a build manually: **Actions → Build Android APK → Run workflow**.
+
+## Build it yourself
 
 You need the [Flutter SDK](https://docs.flutter.dev/get-started/install) installed.
 
