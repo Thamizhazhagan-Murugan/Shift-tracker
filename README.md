@@ -1,6 +1,6 @@
 # Shift Tracker
 
-A simple mobile-friendly web app (PWA) to **punch in / punch out** of work and see how many hours you've clocked **biweekly**. All data is stored locally on your device — no account, no server, works offline.
+A native **Flutter** app to **punch in / punch out** of work and see how many hours you've clocked **biweekly**. All data is stored locally on your device — no account, no server.
 
 ## Features
 
@@ -10,32 +10,59 @@ A simple mobile-friendly web app (PWA) to **punch in / punch out** of work and s
 - **Shift history** grouped by day — tap any shift to edit times or add a note.
 - **Add shifts manually** (e.g. if you forgot to punch in).
 - **Optional time rounding** (5 / 6 / 15 min) in Settings.
-- **Export to CSV** for payroll or your own records.
-- Installable to your phone's home screen; works fully offline.
+- Dark, mobile-first Material 3 UI.
 
-## Use it on your phone
+## Project structure
 
-Because it's a PWA, you just need to open `index.html` from a web address. Two easy ways:
+```
+lib/
+  main.dart                  App entry + theme
+  models/
+    shift.dart               Shift data model
+    settings.dart            Pay-period anchor + rounding
+  services/
+    repository.dart          Local persistence (shared_preferences)
+  utils/
+    time_utils.dart          Pay-period math + per-shift hours
+    format.dart              Date/time formatting helpers
+  screens/
+    home_screen.dart         Main UI (punch card, period summary, shift list)
+    settings_sheet.dart      Settings bottom sheet
+    shift_edit_sheet.dart    Add/edit/delete shift bottom sheet
+test/
+  time_utils_test.dart       Unit tests for hours + pay-period logic
+  widget_test.dart           Punch in/out smoke test
+```
 
-### Option A — GitHub Pages (recommended, free)
-1. In this repo on GitHub: **Settings → Pages**.
-2. Under "Build and deployment", set **Source: Deploy from a branch**.
-3. Choose the branch (`claude/mobile-punch-tracker-ldtlqs` or `main` after merge) and folder **/(root)**, then **Save**.
-4. Wait ~1 minute, then open the URL it gives you (e.g. `https://<user>.github.io/shift-tracker/`) on your phone.
-5. In the browser menu, choose **Add to Home Screen**. It now opens like a native app.
+## Run it
 
-### Option B — Run locally
+You need the [Flutter SDK](https://docs.flutter.dev/get-started/install) installed.
+
 ```bash
-# from the project folder
-python3 -m http.server 8000
-# then open http://localhost:8000 in a browser
+flutter pub get
+
+# Run on a connected device or emulator:
+flutter run
+
+# Or build a release APK to sideload onto your Android phone:
+flutter build apk --release
+# output: build/app/outputs/flutter-apk/app-release.apk
+```
+
+For iOS you'll need a Mac with Xcode (`flutter build ipa`).
+
+## Tests & analysis
+
+```bash
+flutter analyze   # static analysis — clean
+flutter test      # unit + widget tests
 ```
 
 ## First-time setup
 
-Tap **⚙️ Settings** and set your **Pay period start date** — pick the start date of any of your real biweekly pay periods (the app counts 14-day periods forward and backward from there). Optionally choose a rounding increment.
+Open **⚙️ Settings** and set your **Pay period start date** — pick the start date of any of your real biweekly pay periods (the app counts 14-day periods forward and backward from there). Optionally choose a rounding increment.
 
 ## Notes
 
-- Data lives in your browser's local storage on that device. Clearing site data or uninstalling will erase it — use **Export CSV** periodically to back up.
+- Data lives in on-device storage (`shared_preferences`). Uninstalling the app or clearing its data will erase it.
 - Hours are computed per shift and rounded according to your Settings choice.
