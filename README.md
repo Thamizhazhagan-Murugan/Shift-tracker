@@ -1,6 +1,6 @@
 # Shift Tracker
 
-A native **Flutter** app to **punch in / punch out** of work and see how many hours you've clocked **biweekly**. All data is stored locally on your device — no account, no server.
+A native **Android** app (built with **Flutter**) to **punch in / punch out** of work and see how many hours you've clocked **biweekly**. All data is stored locally on your device — no account, no server.
 
 ## Features
 
@@ -41,7 +41,7 @@ You need the [Flutter SDK](https://docs.flutter.dev/get-started/install) install
 ```bash
 flutter pub get
 
-# Run on a connected device or emulator:
+# Run on a connected Android device or emulator:
 flutter run
 
 # Or build a release APK to sideload onto your Android phone:
@@ -49,7 +49,8 @@ flutter build apk --release
 # output: build/app/outputs/flutter-apk/app-release.apk
 ```
 
-For iOS you'll need a Mac with Xcode (`flutter build ipa`).
+To install the APK on your phone, enable "Install unknown apps" for your file
+manager/browser, transfer `app-release.apk`, and tap it.
 
 ## Tests & analysis
 
