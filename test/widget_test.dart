@@ -13,20 +13,20 @@ void main() {
     final repo = await Repository.open();
     await tester.pumpWidget(ShiftTrackerApp(repository: repo));
 
-    // Starts punched out.
-    expect(find.text('Punched out'), findsOneWidget);
+    // Starts clocked out.
+    expect(find.text('Clocked out'), findsOneWidget);
     expect(find.text('Punch In'), findsOneWidget);
 
     // Punch in.
     await tester.tap(find.text('Punch In'));
     await tester.pump();
-    expect(find.text('Punched in'), findsOneWidget);
+    expect(find.text('Clocked in'), findsOneWidget);
     expect(find.text('Punch Out'), findsOneWidget);
 
     // Punch out.
     await tester.tap(find.text('Punch Out'));
     await tester.pump();
-    expect(find.text('Punched out'), findsOneWidget);
+    expect(find.text('Clocked out'), findsOneWidget);
 
     // One shift now appears in the list (shows "in progress"? no — completed).
     expect(repo.loadShifts().length, 1);

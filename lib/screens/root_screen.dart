@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import '../models/settings.dart';
@@ -20,25 +18,31 @@ class RootScreen extends StatefulWidget {
   State<RootScreen> createState() => _RootScreenState();
 }
 
-class _RootScreenState extends State<RootScreen> {
+class _RootScreenState extends State<RootScreen>
+    with WidgetsBindingObserver {
   late List<Shift> _shifts;
   late Settings _settings;
   int _periodOffset = 0;
   int _tab = 0;
-  Timer? _ticker;
 
   @override
   void initState() {
     super.initState();
     _shifts = widget.repository.loadShifts();
     _settings = widget.repository.loadSettings();
-    _syncTicker();
+    // Refresh the "so far" snapshot when the app is reopened — no timer needed.
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    _ticker?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && mounted) setState(() {});
   }
 
   Shift? get _activeShift {
@@ -46,17 +50,6 @@ class _RootScreenState extends State<RootScreen> {
       if (s.inProgress) return s;
     }
     return null;
-  }
-
-  void _syncTicker() {
-    if (_activeShift != null) {
-      _ticker ??= Timer.periodic(const Duration(seconds: 1), (_) {
-        if (mounted) setState(() {});
-      });
-    } else {
-      _ticker?.cancel();
-      _ticker = null;
-    }
   }
 
   Future<void> _persist() => widget.repository.saveShifts(_shifts);
@@ -73,7 +66,6 @@ class _RootScreenState extends State<RootScreen> {
         ));
         _periodOffset = 0;
       }
-      _syncTicker();
     });
     _persist();
   }
@@ -126,7 +118,6 @@ class _RootScreenState extends State<RootScreen> {
           note: result.note,
         ));
       }
-      _syncTicker();
     });
     _persist();
   }

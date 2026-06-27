@@ -79,7 +79,7 @@ class _PunchCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final active = activeShift != null;
     final elapsed =
-        active ? DateTime.now().difference(activeShift!.start).inSeconds : 0;
+        active ? DateTime.now().difference(activeShift!.start) : Duration.zero;
 
     return AppCard(
       padding: const EdgeInsets.symmetric(vertical: 26, horizontal: 18),
@@ -91,18 +91,30 @@ class _PunchCard extends StatelessWidget {
                   fontSize: 12,
                   letterSpacing: 1.4)),
           const SizedBox(height: 6),
-          Text(active ? 'Punched in' : 'Punched out',
+          Text(active ? 'Clocked in' : 'Clocked out',
               style:
                   const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-          const SizedBox(height: 12),
-          if (active)
-            Text(fmtElapsed(elapsed),
+          if (active) ...[
+            const SizedBox(height: 14),
+            Text('Clocked in at',
+                style: TextStyle(
+                    color: Colors.white.withOpacity(0.5), fontSize: 13)),
+            const SizedBox(height: 2),
+            Text(fmtClock(activeShift!.start),
                 style: const TextStyle(
-                  fontSize: 44,
+                  fontSize: 40,
                   fontWeight: FontWeight.bold,
                   fontFeatures: [FontFeature.tabularFigures()],
                 )),
-          if (active) const SizedBox(height: 16),
+            const SizedBox(height: 4),
+            Text('${fmtDurationHm(elapsed)} so far',
+                style: const TextStyle(
+                    color: Color(0xFF34D399),
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600)),
+            const SizedBox(height: 18),
+          ] else
+            const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
             child: FilledButton(
@@ -119,12 +131,15 @@ class _PunchCard extends StatelessWidget {
                       fontSize: 20, fontWeight: FontWeight.bold)),
             ),
           ),
-          if (active) ...[
-            const SizedBox(height: 10),
-            Text('Since ${fmtClock(activeShift!.start)}',
-                style:
-                    TextStyle(color: Colors.white.withOpacity(0.5))),
-          ],
+          const SizedBox(height: 10),
+          Text(
+            active
+                ? 'Hours are calculated from your punch-in and punch-out times.'
+                : 'Tap to record your clock-in time.',
+            textAlign: TextAlign.center,
+            style:
+                TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 12),
+          ),
         ],
       ),
     );

@@ -22,12 +22,11 @@ String fmtClock(DateTime d) {
   return '$hour12:${two(d.minute)} $ampm';
 }
 
-/// Seconds -> "HH:MM:SS"
-String fmtElapsed(int totalSeconds) {
-  final h = totalSeconds ~/ 3600;
-  final m = (totalSeconds % 3600) ~/ 60;
-  final s = totalSeconds % 60;
-  return '${two(h)}:${two(m)}:${two(s)}';
+/// e.g. "3h 24m" (or "0h 09m")
+String fmtDurationHm(Duration d) {
+  final h = d.inHours;
+  final m = d.inMinutes % 60;
+  return '${h}h ${two(m)}m';
 }
 
 String fmtHours(double h) => h.toStringAsFixed(2);

@@ -7,7 +7,10 @@ A native **Android** app (built with **Flutter**) to **punch in / punch out** of
 Three tabs along the bottom:
 
 **Track**
-- **One-tap punch in / punch out** with a live running timer.
+- **One-tap punch in / punch out.** Your clock-in time is recorded, and hours
+  are calculated from the punch-in and punch-out timestamps (no battery-draining
+  background timer). While clocked in it shows when you came in and a "so far"
+  snapshot that refreshes when you reopen the app.
 - **Biweekly pay-period totals**, split into Week 1 / Week 2.
 - Navigate to **previous pay periods** with the ‹ › arrows.
 - **Shift history** grouped by day — tap any shift to edit times or add a note.
