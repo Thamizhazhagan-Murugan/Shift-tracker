@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'screens/home_screen.dart';
+import 'screens/root_screen.dart';
 import 'services/repository.dart';
 
 Future<void> main() async {
@@ -28,7 +28,7 @@ class ShiftTrackerApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: const Color(0xFF0F172A),
       ),
-      home: HomeScreen(repository: repository),
+      home: RootScreen(repository: repository),
     );
   }
 }

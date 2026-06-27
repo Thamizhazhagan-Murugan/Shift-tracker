@@ -23,7 +23,8 @@ class ShiftEditResult {
 /// Bottom sheet to add or edit a shift.
 class ShiftEditSheet extends StatefulWidget {
   final Shift? shift; // null = adding a new shift
-  const ShiftEditSheet({super.key, this.shift});
+  final DateTime? initialDay; // default day for a new shift (from calendar)
+  const ShiftEditSheet({super.key, this.shift, this.initialDay});
 
   @override
   State<ShiftEditSheet> createState() => _ShiftEditSheetState();
@@ -43,8 +44,9 @@ class _ShiftEditSheetState extends State<ShiftEditSheet> {
       _end = s.end;
       _noteController = TextEditingController(text: s.note);
     } else {
-      final now = DateTime.now();
-      _start = DateTime(now.year, now.month, now.day, now.hour);
+      final base = widget.initialDay ?? DateTime.now();
+      final hour = widget.initialDay != null ? 9 : DateTime.now().hour;
+      _start = DateTime(base.year, base.month, base.day, hour);
       _end = _start.add(const Duration(hours: 8));
       _noteController = TextEditingController();
     }

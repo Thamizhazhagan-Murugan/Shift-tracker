@@ -55,4 +55,53 @@ void main() {
       expect(prev.index, 0);
     });
   });
+
+  group('aggregation', () {
+    final shifts = [
+      Shift(
+          id: 'a',
+          start: DateTime(2026, 1, 5, 9),
+          end: DateTime(2026, 1, 5, 13)), // 4h
+      Shift(
+          id: 'b',
+          start: DateTime(2026, 1, 5, 14),
+          end: DateTime(2026, 1, 5, 17)), // 3h same day
+      Shift(
+          id: 'c',
+          start: DateTime(2026, 1, 8, 8),
+          end: DateTime(2026, 1, 8, 12)), // 4h diff day
+    ];
+
+    test('hoursOnDay sums shifts on a day', () {
+      expect(hoursOnDay(shifts, DateTime(2026, 1, 5), 1), closeTo(7.0, 1e-9));
+      expect(hoursOnDay(shifts, DateTime(2026, 1, 6), 1), 0);
+    });
+
+    test('hoursByDay groups by calendar day', () {
+      final map = hoursByDay(shifts, 1);
+      expect(map[DateTime(2026, 1, 5)], closeTo(7.0, 1e-9));
+      expect(map[DateTime(2026, 1, 8)], closeTo(4.0, 1e-9));
+      expect(map.length, 2);
+    });
+
+    test('hoursInRange sums a half-open window', () {
+      expect(
+        hoursInRange(shifts, DateTime(2026, 1, 5), DateTime(2026, 1, 8), 1),
+        closeTo(7.0, 1e-9), // Jan 8 excluded
+      );
+      expect(
+        hoursInRange(shifts, DateTime(2026, 1, 5), DateTime(2026, 1, 9), 1),
+        closeTo(11.0, 1e-9),
+      );
+    });
+
+    test('weekStart returns the Sunday on/before', () {
+      expect(weekStart(DateTime(2026, 1, 8)), DateTime(2026, 1, 4)); // Thu->Sun
+      expect(weekStart(DateTime(2026, 1, 4)), DateTime(2026, 1, 4)); // Sunday
+    });
+
+    test('monthStart returns first of month', () {
+      expect(monthStart(DateTime(2026, 1, 20)), DateTime(2026, 1, 1));
+    });
+  });
 }

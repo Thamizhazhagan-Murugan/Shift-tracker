@@ -50,3 +50,52 @@ PayPeriod viewedPeriod(DateTime anchor, int offset, {DateTime? now}) {
   final current = periodIndexFor(anchor, now ?? DateTime.now());
   return periodBounds(anchor, current + offset);
 }
+
+/// Midnight of the given moment's local calendar day.
+DateTime dayKey(DateTime d) => DateTime(d.year, d.month, d.day);
+
+/// Total rounded hours worked on [day] (shifts attributed by their start date).
+double hoursOnDay(List<Shift> shifts, DateTime day, int rounding,
+    {DateTime? now}) {
+  final key = dayKey(day);
+  var total = 0.0;
+  for (final s in shifts) {
+    if (dayKey(s.start) == key) {
+      total += shiftHours(s, rounding, now: now);
+    }
+  }
+  return total;
+}
+
+/// Map of calendar day -> total rounded hours, for every day that has a shift.
+Map<DateTime, double> hoursByDay(List<Shift> shifts, int rounding,
+    {DateTime? now}) {
+  final map = <DateTime, double>{};
+  for (final s in shifts) {
+    final key = dayKey(s.start);
+    map[key] = (map[key] ?? 0) + shiftHours(s, rounding, now: now);
+  }
+  return map;
+}
+
+/// Sunday on or before [d] — the start of [d]'s calendar week.
+DateTime weekStart(DateTime d) {
+  final k = dayKey(d);
+  return k.subtract(Duration(days: k.weekday % 7));
+}
+
+/// First day of [d]'s calendar month.
+DateTime monthStart(DateTime d) => DateTime(d.year, d.month, 1);
+
+/// Total rounded hours for shifts whose start is in [start, end).
+double hoursInRange(
+    List<Shift> shifts, DateTime start, DateTime end, int rounding,
+    {DateTime? now}) {
+  var total = 0.0;
+  for (final s in shifts) {
+    if (!s.start.isBefore(start) && s.start.isBefore(end)) {
+      total += shiftHours(s, rounding, now: now);
+    }
+  }
+  return total;
+}

@@ -4,13 +4,29 @@ A native **Android** app (built with **Flutter**) to **punch in / punch out** of
 
 ## Features
 
+Three tabs along the bottom:
+
+**Track**
 - **One-tap punch in / punch out** with a live running timer.
 - **Biweekly pay-period totals**, split into Week 1 / Week 2.
 - Navigate to **previous pay periods** with the ‹ › arrows.
 - **Shift history** grouped by day — tap any shift to edit times or add a note.
 - **Add shifts manually** (e.g. if you forgot to punch in).
-- **Optional time rounding** (5 / 6 / 15 min) in Settings.
-- Dark, mobile-first Material 3 UI.
+
+**Calendar**
+- An **interactive month calendar** showing the hours worked on each day.
+- Tap any day to see its total and its shifts; edit them or add a shift to that day.
+
+**Trends**
+- An **interactive bar chart** of hours worked, switchable between **Day / Week / Month**.
+- Tap a bar to see the exact date/period and hours.
+- Summary stats: this period, average per period, and total shown.
+
+**Settings**
+- **Choose when your biweekly period starts** (pay-period anchor date).
+- **Optional time rounding** (5 / 6 / 15 min).
+
+Dark, mobile-first Material 3 UI.
 
 ## Project structure
 
@@ -23,15 +39,19 @@ lib/
   services/
     repository.dart          Local persistence (shared_preferences)
   utils/
-    time_utils.dart          Pay-period math + per-shift hours
+    time_utils.dart          Pay-period math, per-shift hours, aggregation
     format.dart              Date/time formatting helpers
   screens/
-    home_screen.dart         Main UI (punch card, period summary, shift list)
-    settings_sheet.dart      Settings bottom sheet
+    root_screen.dart         Shell: owns state + bottom navigation
+    home_tab.dart            Track tab (punch, period summary, shift list)
+    calendar_tab.dart        Interactive month calendar (hours per day)
+    trends_tab.dart          Interactive day/week/month bar chart
+    settings_sheet.dart      Settings bottom sheet (period start, rounding)
     shift_edit_sheet.dart    Add/edit/delete shift bottom sheet
+    widgets.dart             Shared widgets (card, shift row)
 test/
-  time_utils_test.dart       Unit tests for hours + pay-period logic
-  widget_test.dart           Punch in/out smoke test
+  time_utils_test.dart       Unit tests for hours, pay-period, aggregation
+  widget_test.dart           Punch flow + calendar/trends render tests
 ```
 
 ## Download the APK from GitHub Actions (no setup needed)
